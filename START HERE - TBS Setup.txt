@@ -1,0 +1,222 @@
+===============================================================================
+  J.A.R.V.I.S.  -  Setup & Reference
+  Built 2026-07-21 for Daniel Lombard
+===============================================================================
+
+A local voice assistant. Wake word, British voice, and real tools that read
+your actual machine and your actual files. Runs on your PC; the only thing
+that leaves it is the text of what you say.
+
+
+-------------------------------------------------------------------------------
+  1. WHERE EVERYTHING IS
+-------------------------------------------------------------------------------
+
+Root:
+  C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\
+
+  core\                    The brain and the tools
+    main.py                Entry point - run this
+    brain.py               Claude API wrapper + tool-use loop + streaming
+    streaming.py           Sentence splitter and speech queue
+    digest.py              Rebuilds the project index
+    config.py              Settings, paths, API key loading
+    tools\                 19 tools across 7 modules
+
+  personality\             Who he is and how he sounds
+    system-prompt.md       HIS PERSONALITY. Plain English. Edit this to change him.
+    voice.py               Wake word -> record -> transcribe -> speak
+    setup_piper.py         Downloads the British voice
+    voice-stack.md         Why each piece of the voice stack was chosen
+    voices\                en_GB-alan-medium.onnx  (60 MB, already installed)
+
+  research\                The Iron Man canon study the design came from
+
+  data\                    His memory (created on first use)
+    memory.json            Facts he remembers about you
+    schedule.json          Your classes and deadlines
+    projects-index.json    What he knows about your projects
+    projects-digest.md     The same thing, readable by you
+
+  Refresh TBS Index.bat Double-click to refresh his project knowledge now
+
+
+-------------------------------------------------------------------------------
+  2. WHAT WORKS RIGHT NOW  (no setup needed)
+-------------------------------------------------------------------------------
+
+  [OK]  Speech      Piper, offline, free, British. Voice model installed.
+  [OK]  Tools       All 19 run locally, verified.
+  [OK]  Mic         Detected: TONOR TC30.
+  [OK]  Streaming   Speaks sentence 1 while sentence 2 generates (0.47s to audio).
+  [OK]  Index       26 projects, 95 open items. Auto-refreshes daily at 7:00 AM.
+
+Hear him talk without any setup at all:
+
+    cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\personality"
+    py -3.11 voice.py --say "Good evening, sir."
+
+
+-------------------------------------------------------------------------------
+  3. WHAT'S MISSING  (two keys)
+-------------------------------------------------------------------------------
+
+KEY 1 - ANTHROPIC_API_KEY   (required - this is his brain)
+
+  1. Go to console.anthropic.com
+  2. Sign in. Add billing (pay-as-you-go, separate from any Claude subscription).
+  3. Settings -> API Keys -> Create Key. Name it "TBS".
+  4. COPY IT NOW. It is shown exactly once and never again.
+  5. In PowerShell:
+
+         setx ANTHROPIC_API_KEY "sk-ant-your-key-here"
+
+  6. OPEN A NEW POWERSHELL WINDOW.
+     setx does NOT affect the window you typed it in. This is the single most
+     common reason it appears to fail. Close it, open a fresh one.
+
+  7. Verify:
+
+         $env:ANTHROPIC_API_KEY
+
+     If it prints your key, done.
+
+  Alternative: create a file named  .env  in the TBS root containing:
+         ANTHROPIC_API_KEY=sk-ant-...
+
+
+KEY 2 - PICOVOICE_ACCESS_KEY   (optional - this is his ears)
+
+  Free, no credit card. Only needed for the "TBS" wake word.
+  Without it he still works - you just type instead of speak.
+
+  1. console.picovoice.ai -> sign up -> copy the AccessKey
+  2. setx PICOVOICE_ACCESS_KEY "your-key-here"
+  3. py -3.11 -m pip install pvporcupine
+
+  Note: "TBS" is a built-in wake word. No training, no custom model.
+
+
+-------------------------------------------------------------------------------
+  4. HOW TO RUN HIM
+-------------------------------------------------------------------------------
+
+    cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\core"
+
+    py -3.11 main.py --text          Keyboard only. No mic needed. Start here.
+    py -3.11 main.py                 Voice if available, keyboard if not.
+    py -3.11 main.py --once "..."    One question, then exit.
+
+  Check the voice stack at any time:
+    cd ..\personality
+    py -3.11 voice.py --check
+
+
+-------------------------------------------------------------------------------
+  5. WHAT HE CAN ACTUALLY DO  (19 tools)
+-------------------------------------------------------------------------------
+
+  MACHINE      battery, CPU, RAM, disk, wifi
+  APPS         launch an app, close an app, open a URL
+  FILES        search your files, open a file
+  WEB          web search, fetch a page
+  SCHEDULE     view / add / remove classes and deadlines
+  MEMORY       remember, recall, forget facts about you
+  PROJECTS     project_status, whats_blocking, list_projects,
+               recent_activity, project_search
+
+  Things worth asking him:
+    "How much battery do I have?"
+    "What's the state of the business?"
+    "What's blocking me?"
+    "What have I been working on this week?"
+    "Where did I put the Calendly link?"
+    "Remember that my midterm is on the 14th."
+
+  IMPORTANT: the project tools are READ-ONLY by design. He can read anything in
+  your vault but cannot change, move, or delete a single file. A misheard
+  command can never damage your work.
+
+
+-------------------------------------------------------------------------------
+  6. WHAT IT COSTS
+-------------------------------------------------------------------------------
+
+  Speech (Piper)        FREE forever. Runs on your CPU, fully offline.
+  Transcription         FREE. Whisper runs locally.
+  Wake word             FREE. Picovoice free tier.
+  His thinking          Pay-per-use on your API key. Short exchanges are
+                        fractions of a cent. It adds up slowly.
+
+  To spend less, open config.py and change MODEL to "claude-haiku-4-5-20251001".
+  Noticeably cheaper and faster; slightly less sharp.
+
+
+-------------------------------------------------------------------------------
+  7. CHANGING HIS PERSONALITY
+-------------------------------------------------------------------------------
+
+  Open  personality\system-prompt.md  and edit the prose. That's it - no code.
+
+  It is parsed at runtime, so the next time you start him, he has changed.
+
+  The rules that make him feel like TBS:
+    - Always "sir"
+    - Two sentences max when speaking
+    - Dry pushback ONCE, then comply
+    - Never fabricate - "I don't have that, sir"
+    - No filler openers ("Certainly", "Great question")
+    - Reads your files before answering about your projects; never guesses
+
+
+-------------------------------------------------------------------------------
+  8. WHEN SOMETHING BREAKS
+-------------------------------------------------------------------------------
+
+  "No module named X"
+      cd core         &&  py -3.11 -m pip install -r requirements.txt
+      cd personality  &&  py -3.11 -m pip install -r requirements.txt
+
+  "My API key was rejected, Sir"
+      The key is wrong, expired, or has no billing. Check console.anthropic.com.
+
+  Key set but he still says it's missing
+      You didn't open a new terminal after setx. Close it. Open a fresh one.
+
+  No sound
+      py -3.11 voice.py --check     (confirms Piper + the voice model)
+      Then check Windows output device - is it routed somewhere unexpected?
+
+  He doesn't hear the wake word
+      PICOVOICE_ACCESS_KEY missing, or pvporcupine not installed. See section 3.
+
+  His project info is stale
+      Double-click "Refresh TBS Index.bat"
+
+  'py' is not recognized
+      Python 3.11+ isn't installed or isn't on PATH. Reinstall from python.org
+      and tick "Add python.exe to PATH".
+
+
+-------------------------------------------------------------------------------
+  9. PRIVACY - what leaves this machine
+-------------------------------------------------------------------------------
+
+  STAYS LOCAL:  your voice audio, wake-word detection, transcription,
+                speech synthesis, all file reads, all system info
+
+  LEAVES:       only the TEXT of what you said, plus context (date, your
+                remembered facts, today's schedule), sent to the Claude API
+
+  Your actual voice recording never goes anywhere.
+
+
+===============================================================================
+  FASTEST PATH TO A WORKING TBS
+
+  1. Get an API key at console.anthropic.com
+  2. setx ANTHROPIC_API_KEY "sk-ant-..."
+  3. CLOSE PowerShell. Open a new one.
+  4. cd to core\  and run:  py -3.11 main.py --text
+  5. Ask him: "What's the state of the business?"
+===============================================================================

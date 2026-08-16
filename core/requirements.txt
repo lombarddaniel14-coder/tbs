@@ -1,0 +1,9 @@
+# Core (required)
+anthropic>=0.69.0
+
+# System telemetry — battery, CPU, RAM, disk (optional but strongly recommended;
+# without it, system_info falls back to disk and wifi only)
+psutil>=5.9.0
+
+# Voice input/output is owned by ..\personality\ — install whatever that layer
+# declares. Nothing in core/ imports a speech library directly.

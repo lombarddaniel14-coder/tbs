@@ -1,0 +1,34 @@
+# TBS voice layer — Windows 11 / CPU only
+# Python 3.10+ required (piper-tts floor). Tested against 3.11.
+#   py -3.11 -m venv .venv
+#   .\.venv\Scripts\Activate.ps1
+#   pip install -r requirements.txt
+#   python voice.py --check
+
+# --- Core: required -------------------------------------------------------
+anthropic>=0.60          # Claude API (Opus 4.8 brain / Haiku 4.5 ambient)
+pvporcupine>=3.0         # wake word; "tbs" is a BUILT-IN keyword
+sounddevice>=0.4.6       # mic capture (PortAudio; ships wheels on Windows)
+numpy>=1.24              # audio buffers + RMS gate
+faster-whisper>=1.0      # STT via CTranslate2, int8 on CPU
+
+# --- TTS: pick at least one ----------------------------------------------
+piper-tts>=1.4           # free, offline, en_GB-alan-medium — THE DEFAULT
+                         #   after installing: py -3.11 setup_piper.py
+                         #   (downloads + verifies the voice pair, speaks a test line)
+elevenlabs>=1.0          # recommended quality; needs ELEVENLABS_API_KEY
+
+# --- Playback / fallbacks: optional but recommended ----------------------
+miniaudio>=1.59          # smooth in-process MP3 playback for ElevenLabs
+soundfile>=0.12          # WAV playback on non-Windows
+pyttsx3>=2.90            # Windows SAPI last-resort voice (so TBS is never mute)
+
+# Environment variables consumed (see voice-stack.md):
+#   ANTHROPIC_API_KEY        (or an `ant auth login` profile)
+#   PICOVOICE_ACCESS_KEY     free at https://console.picovoice.ai
+#   ELEVENLABS_API_KEY       optional — omit to fall through to Piper
+#   TBS_TTS               piper (default) | elevenlabs | sapi | auto
+#   TBS_PIPER_VOICE       path to the .onnx (default: personality\voices\)
+#   TBS_STT_MODEL         small.en (default) | base.en on weaker CPUs
+#   TBS_SILENCE_MS        500 (drop to 400 to shave latency)
+#   TBS_WAKE_SENSITIVITY  0.6
