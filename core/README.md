@@ -1,6 +1,6 @@
 # TBS — core
 
-The brain and hands of a local Iron-Man-style assistant that runs on Daniel's
+The brain and hands of a local Iron-Man-style assistant that runs on the user's
 Windows 11 ThinkPad. It listens (or reads typed input), decides what to do,
 actually does it on the machine, and answers.
 
@@ -28,7 +28,7 @@ TBS\
 │       ├── files.py       search and open files
 │       ├── web.py         web search + page fetch
 │       ├── schedule.py    local JSON calendar (classes, deadlines, events)
-│       └── memory.py      persistent facts about Daniel
+│       └── memory.py      persistent facts about the user
 ├── personality\           <- built by the personality layer (voice.py, system-prompt.md)
 └── data\                  <- created on first use: schedule.json, memory.json
 ```
@@ -67,7 +67,7 @@ today. So TBS starts every session already knowing who he is talking to.
 Requires **Python 3.11+** on Windows.
 
 ```powershell
-cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\core"
+cd "<VAULT_ROOT>\Projects\Tools\TBS\core"
 py -3.11 -m pip install -r requirements.txt
 ```
 
@@ -89,7 +89,7 @@ For the voice, install the personality layer's dependencies and the offline
 Piper voice (free, no key, ~60 MB one-time download):
 
 ```powershell
-cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\personality"
+cd "<VAULT_ROOT>\Projects\Tools\TBS\personality"
 py -3.11 -m pip install -r requirements.txt
 py -3.11 setup_piper.py
 ```
@@ -110,7 +110,7 @@ Tool calls are echoed as `[tool] name(args)` so you can see what he touched.
 Try these:
 
 - "What's my battery at?" / "How's the machine doing?"
-- "Open Spotify" · "Close Chrome" · "Pull up the Bentley registrar page"
+- "Open Spotify" · "Close Chrome" · "Pull up the registrar page"
 - "Find my resume" · "Where's that econ essay?"
 - "Add GB 110 on Mondays at 9:30 in Smith 210" · "What do I have this week?"
 - "Remember that my roommate is Malik" · "What do you know about me?"
@@ -209,7 +209,7 @@ Everything is in `config.py`, overridable by environment variable or `.env`:
 | `ANTHROPIC_API_KEY` | — | required |
 | `TBS_THINKING` | `off` | `adaptive` makes Claude reason before answering (slower, smarter) |
 | `TBS_EFFORT` | `low` | `low` / `medium` / `high` / `xhigh` / `max` |
-| `TBS_USER_NAME` | `Daniel` | used by the built-in fallback persona |
+| `TBS_USER_NAME` | `the user` | used by the built-in fallback persona |
 | `TBS_STREAM` | `on` | `off` waits for the whole reply before speaking (the old behaviour) |
 | `TBS_TIMINGS` | `on` | print the wake→transcript→first token→first audio→done breakdown |
 | `TBS_TTS` | `piper` | `piper` / `elevenlabs` / `sapi` / `auto` — read by the personality layer too |
@@ -227,7 +227,7 @@ at the top of `config.py`.
    turn on mic input *and* wake-word barge-in; both are already wired.
 3. ~~Streaming replies~~ — done. Sentence-boundary streaming with gapless
    queued playback; see `streaming.py`.
-4. **More hands** — volume and media control, screenshots, clipboard, Bentley
+4. **More hands** — volume and media control, screenshots, clipboard, student
    portal / Canvas scraping, email triage.
 5. **A real calendar bridge** — sync `schedule.json` with Google Calendar
    instead of keeping a separate list.

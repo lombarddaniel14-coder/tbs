@@ -1,4 +1,4 @@
-"""Project awareness — lets TBS answer questions about Daniel's real work.
+"""Project awareness — lets TBS answer questions about the user's real work.
 
 Reads his Obsidian vault and code folders and reports status out loud. Every
 answer is grounded in a file on disk; nothing here guesses.
@@ -27,9 +27,16 @@ import config
 
 HOME = Path.home()
 
-# The vault was rebuilt and renamed to Claude Data on 2026-08-13; the old
-# Claude Stuff root survives only as a temporary compat junction.
-VAULT_ROOT = HOME / "OneDrive - Bentley University" / "Claude Data"
+# Set VAULT_ROOT to the absolute path of the Obsidian vault. Falls back to the
+# first "OneDrive*" root under home, then to ~/Claude Data.
+def _default_vault_root() -> Path:
+    for child in sorted(HOME.glob("OneDrive*")):
+        if (child / "Claude Data").is_dir():
+            return child / "Claude Data"
+    return HOME / "Claude Data"
+
+
+VAULT_ROOT = Path(os.environ.get("VAULT_ROOT") or _default_vault_root())
 
 # Active builds live INSIDE the vault under Projects\ (five sections since
 # 2026-08-13: Main Business, Side Business, The Buddy System, Tools,

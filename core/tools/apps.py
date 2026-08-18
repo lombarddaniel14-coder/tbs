@@ -132,7 +132,7 @@ TOOLS = [
         "name": "open_url",
         "description": (
             "Open a web page in the default browser. Use for 'pull up X', "
-            "'open youtube', 'take me to the Bentley portal', and similar."
+            "'open youtube', 'take me to the student portal', and similar."
         ),
         "input_schema": {
             "type": "object",

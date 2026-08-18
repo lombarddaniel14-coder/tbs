@@ -9,7 +9,7 @@ splitter, the playback queue, voice.py, Piper, winsound) is the real thing.
     py -3.11 core\\tests\\test_end_to_end.py --bargein  # interrupt mid-reply
 
 It prints the two timelines side by side, which is the number the streaming
-work was done for: how long Daniel stares at a silent laptop.
+work was done for: how long the user stares at a silent laptop.
 """
 
 from __future__ import annotations

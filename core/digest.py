@@ -1,6 +1,6 @@
 """Build TBS's project index.
 
-Walks Daniel's vault and code folders and writes two files into TBS's own
+Walks the user's vault and code folders and writes two files into TBS's own
 data directory:
 
     data\\projects-index.json   - what the `projects` tools read

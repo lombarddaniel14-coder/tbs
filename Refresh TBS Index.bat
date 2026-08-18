@@ -1,5 +1,5 @@
 @echo off
-REM Rebuilds TBS's project index so he knows the current state of Daniel's work.
+REM Rebuilds TBS's project index so he knows the current state of the user's work.
 REM Registered with Windows Task Scheduler as "TBS Project Index" (daily, 7:00 AM).
 REM Safe to double-click any time to refresh on demand.
 

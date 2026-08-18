@@ -11,7 +11,7 @@ and the reasoning for each. Target: **wake word → first spoken syllable in und
 |---|---|---|---|
 | Wake word | **Porcupine** (`pvporcupine`), built-in keyword `"tbs"` | openWakeWord | "TBS" is a *shipped* keyword. Zero training. ~30 ms frames, <5% of one core. |
 | STT | **faster-whisper**, `small.en`, `int8` | `base.en` if the ThinkPad is a U-series | Best CPU accuracy-per-millisecond on x86. ~0.6 s for a 4 s utterance. |
-| TTS | **ElevenLabs Flash v2.5**, voice `Daniel` (`onwK4e9ZLuTAKqWW03F9`) | **Piper** `en_GB-alan-medium` | Flash is ~75 ms to first byte and actually sounds like the character. Piper is free, offline, ~10× realtime. |
+| TTS | **ElevenLabs Flash v2.5**, voice `the user` (`onwK4e9ZLuTAKqWW03F9`) | **Piper** `en_GB-alan-medium` | Flash is ~75 ms to first byte and actually sounds like the character. Piper is free, offline, ~10× realtime. |
 | Playback | `winsound` (stdlib) for WAV; `sounddevice` for streamed PCM | — | No extra deps on Windows. |
 | LLM | `claude-opus-4-8` brain / `claude-haiku-4-5` ambient | — | See `system-prompt.md` § Model routing. |
 
@@ -120,7 +120,7 @@ Three real options, ranked.
 (real-time agents) ([ElevenLabs models](https://elevenlabs.io/docs/overview/models),
 [cheat sheet 2026](https://www.webfuse.com/elevenlabs-cheat-sheet)).
 
-**Voice: `Daniel` — voice ID `onwK4e9ZLuTAKqWW03F9`.** Male, middle-aged, British,
+**Voice: `the user` — voice ID `onwK4e9ZLuTAKqWW03F9`.** Male, middle-aged, British,
 authoritative, originally a news-presenter voice. It is the closest default to the
 film TBS: RP, measured, faintly amused. Second choice: `George` —
 `JBFqnCBsd6RMkjVDRZzb`, warmer, narration-styled, slightly less crisp.
@@ -141,7 +141,7 @@ audio = client.text_to_speech.stream(
 Starter is $5/mo for 30k. A two-sentence reply is ~120 chars, so $5 ≈ 250 replies/month.
 The two-sentence rule in the system prompt is doing double duty here as a cost control.
 
-⚠️ **ElevenLabs default voices expire 31 December 2026.** Before then, clone `Daniel`
+⚠️ **ElevenLabs default voices expire 31 December 2026.** Before then, clone `the user`
 into your own workspace voice (Voices → Add → save a copy) and pin *that* ID, or you'll
 wake up one January to a silent TBS.
 
@@ -201,7 +201,7 @@ Measured from the end of the wake word to the first audible syllable of the repl
 | Stage | Time | Notes |
 |---|---:|---|
 | Wake word detect | 40 ms | Porcupine, 32 ms frames |
-| Record until silence | *n/a* | Excluded — this is Daniel talking, not lag |
+| Record until silence | *n/a* | Excluded — this is the user talking, not lag |
 | End-of-speech detection | 550 ms | 500 ms silence threshold + frame slack. **The single biggest lever.** |
 | STT (`small.en`, int8, 4 s clip) | 620 ms | |
 | Claude first token (Haiku, `effort=low`) | 400 ms | Opus w/ adaptive thinking: 900–1500 ms |
@@ -247,7 +247,7 @@ Piper is not the bottleneck; the silence threshold and the LLM are.
 ## 5. Install, start to finish
 
 ```powershell
-cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\personality"
+cd "<VAULT_ROOT>\Projects\Tools\TBS\personality"
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt

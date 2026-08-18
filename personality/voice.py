@@ -77,7 +77,7 @@ SILENCE_RMS = float(os.getenv("TBS_SILENCE_RMS", "500"))
 # "auto" -> elevenlabs if a key is present, else piper, else sapi.
 TTS_BACKEND = os.getenv("TBS_TTS", "piper")
 
-ELEVEN_VOICE_ID = os.getenv("TBS_ELEVEN_VOICE", "onwK4e9ZLuTAKqWW03F9")  # "Daniel", British
+ELEVEN_VOICE_ID = os.getenv("TBS_ELEVEN_VOICE", "onwK4e9ZLuTAKqWW03F9")  # "the user", British
 ELEVEN_MODEL = os.getenv("TBS_ELEVEN_MODEL", "eleven_flash_v2_5")       # ~75 ms latency
 ELEVEN_FORMAT = os.getenv("TBS_ELEVEN_FORMAT", "mp3_22050_32")          # small = fast
 

@@ -1,6 +1,6 @@
 ===============================================================================
   J.A.R.V.I.S.  -  Setup & Reference
-  Built 2026-07-21 for Daniel Lombard
+  Built 2026-07-21
 ===============================================================================
 
 A local voice assistant. Wake word, British voice, and real tools that read
@@ -13,7 +13,7 @@ that leaves it is the text of what you say.
 -------------------------------------------------------------------------------
 
 Root:
-  C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\
+  <VAULT_ROOT>\Projects\Tools\TBS\
 
   core\                    The brain and the tools
     main.py                Entry point - run this
@@ -53,7 +53,7 @@ Root:
 
 Hear him talk without any setup at all:
 
-    cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\personality"
+    cd "<VAULT_ROOT>\Projects\Tools\TBS\personality"
     py -3.11 voice.py --say "Good evening, sir."
 
 
@@ -101,7 +101,7 @@ KEY 2 - PICOVOICE_ACCESS_KEY   (optional - this is his ears)
   4. HOW TO RUN HIM
 -------------------------------------------------------------------------------
 
-    cd "C:\Users\Daniel\OneDrive - Bentley University\Claude Stuff\Projects\Tools\TBS\core"
+    cd "<VAULT_ROOT>\Projects\Tools\TBS\core"
 
     py -3.11 main.py --text          Keyboard only. No mic needed. Start here.
     py -3.11 main.py                 Voice if available, keyboard if not.

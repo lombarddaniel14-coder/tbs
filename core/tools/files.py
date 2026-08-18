@@ -9,13 +9,21 @@ from pathlib import Path
 # Windows "known folders" can be redirected (OneDrive Known Folder Move puts
 # the real Desktop inside a OneDrive root, leaving ~\Desktop nonexistent), so
 # resolve each one instead of assuming it sits directly under the home dir.
-# Since 2026-08-13 the known folders live in the Bentley OneDrive; the old
-# personal ~\OneDrive root is dead but may leave empty shell folders behind,
-# so the Bentley root must be checked first.
+# A tenant OneDrive ("OneDrive - <Org>") takes priority over a personal one,
+# which may survive as an empty shell folder. Set ONEDRIVE_ROOT_NAME to pin a
+# specific root; otherwise any "OneDrive*" directory under home is discovered.
+def _onedrive_roots():
+    pinned = os.environ.get("ONEDRIVE_ROOT_NAME")
+    if pinned:
+        yield Path.home() / pinned
+    for child in sorted(Path.home().glob("OneDrive*")):
+        if child.is_dir():
+            yield child
+
+
 def _known_folder(name: str) -> Path:
     for candidate in (
-        Path.home() / "OneDrive - Bentley University" / name,
-        Path.home() / "OneDrive" / name,
+        *[root / name for root in _onedrive_roots()],
         Path.home() / name,
     ):
         if candidate.is_dir():

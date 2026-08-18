@@ -53,7 +53,7 @@ THINKING_MODE = os.environ.get("TBS_THINKING", "off").strip().lower()
 EFFORT = os.environ.get("TBS_EFFORT", "low").strip().lower()
 
 # Name TBS addresses the user by (used in the fallback system prompt).
-USER_NAME = os.environ.get("TBS_USER_NAME", "Daniel")
+USER_NAME = os.environ.get("TBS_USER_NAME", "the user")
 
 
 # --------------------------------------------------------------------------
